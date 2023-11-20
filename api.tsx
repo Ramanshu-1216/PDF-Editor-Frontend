@@ -1,4 +1,4 @@
-const base_url = 'https://pdf-editor-backend-snowy.vercel.app';
+const base_url = 'http://localhost:8000';
 const API_EDPOINTS = {
     login: base_url + '/login',
     signup: base_url + '/createUser',

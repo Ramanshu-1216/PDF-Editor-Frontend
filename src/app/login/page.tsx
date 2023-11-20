@@ -64,7 +64,12 @@ export default function Login() {
           setErrors({ email: 'Something went wrong!', password: 'Something went wrong!' });
         }
         const data = await response.json();
-        if(!ISSERVER){
+        if (data.error) {
+          setErrors({ email: data.msg, password: data.msg });
+          console.log(data);
+          return;
+        }
+        if (!ISSERVER) {
           localStorage.setItem('token', data.data.token);
         }
         router.push('/');

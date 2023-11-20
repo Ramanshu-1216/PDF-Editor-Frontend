@@ -21,7 +21,7 @@ export default function Home() {
   const [numPages, setNumPages] = useState<number>();
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [checkedPages, setCheckedPages] = useState<number[]>([]);
-
+  const [buttonText, setButtonText] = useState("Delete Pages and Download");
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setPdfFile(file);
@@ -62,6 +62,7 @@ export default function Home() {
     });
   };
   const handleDeleteClick = async () => {
+    setButtonText("Loading");
     if (pdfFile && token != null && token !== undefined) {
       const formData = new FormData();
       formData.append('pdfFile', pdfFile);
@@ -82,13 +83,14 @@ export default function Home() {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(blobUrl);
+      setButtonText("Delete Pages and Download");
     }
   }
 
   const handleLogout = () => {
-    router.push('/login');
     if (!ISSERVER) {
       localStorage.removeItem('token');
+      router.push('/login');
     }
   }
 
@@ -97,7 +99,7 @@ export default function Home() {
       <div className='bg-gray-800 min-h-screen'>
         <div className='flex p-10'>
           <p className='text-xl flex-auto text-sky-900 font-bold'>Delete Pages</p>
-          <button className='rounded-full px-10 py-2 bg-orange-400 font-semibold hover:bg-orange-100 hover:text-black text-lg' onClick={handleDeleteClick}>Delete Pages</button>
+          <button className='rounded-full px-10 py-2 bg-orange-400 font-semibold hover:bg-orange-100 hover:text-black text-lg' onClick={handleDeleteClick}>{buttonText}</button>
         </div>
         <div className="flex items-center md:justify-center">
           <Document file={pdfFile} onLoadError={(error) => console.log(error)} onLoadSuccess={onDocumentLoadSuccess}>
