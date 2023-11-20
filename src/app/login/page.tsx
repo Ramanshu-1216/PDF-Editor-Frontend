@@ -8,6 +8,8 @@ interface FormErrors {
   password?: string;
 }
 
+const ISSERVER = typeof window === "undefined";
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,9 +28,11 @@ export default function Login() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token || token !== 'null') {
-      router.push('/');
+    if (!ISSERVER) {
+      const token = localStorage.getItem('token');
+      if (token || token !== 'null') {
+        router.push('/');
+      }
     }
   }, []);
 
@@ -45,7 +49,7 @@ export default function Login() {
     }
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      try{
+      try {
         const response = await fetch(isSignup ? API_EDPOINTS.signup : API_EDPOINTS.login, {
           method: 'POST',
           headers: {
@@ -60,11 +64,13 @@ export default function Login() {
           setErrors({ email: 'Something went wrong!', password: 'Something went wrong!' });
         }
         const data = await response.json();
-        localStorage.setItem('token', data.data.token);
+        if(!ISSERVER){
+          localStorage.setItem('token', data.data.token);
+        }
         router.push('/');
         console.log(data);
       }
-      catch(error){
+      catch (error) {
         console.error(error);
         setErrors({ email: 'Something went wrong!', password: 'Something went wrong!' });
       }

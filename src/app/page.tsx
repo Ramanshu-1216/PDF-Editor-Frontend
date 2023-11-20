@@ -10,8 +10,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.vers
 
 const ISSERVER = typeof window === "undefined";
 export default function Home() {
-  var token : string | null = "";
-  if(!ISSERVER){
+  var token: string | null = "";
+  if (!ISSERVER) {
     token = localStorage.getItem('token');
   }
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if(!ISSERVER){
+    if (!ISSERVER) {
       const token = localStorage.getItem('token');
       if (!token || token === 'null') {
         router.push('/login');
@@ -87,10 +87,10 @@ export default function Home() {
 
   const handleLogout = () => {
     router.push('/');
-    if(!ISSERVER){
+    if (!ISSERVER) {
       localStorage.removeItem('token');
     }
-  } 
+  }
 
   if (showPDF) {
     return (
