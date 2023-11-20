@@ -8,8 +8,12 @@ import API_EDPOINTS from '../../api';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
+const ISSERVER = typeof window === "undefined";
 export default function Home() {
-  const token = localStorage.getItem('token');
+  var token : string | null = "";
+  if(!ISSERVER){
+    token = localStorage.getItem('token');
+  }
   const router = useRouter();
   const [pdfFile, setPdfFile] = useState<File | null | undefined>(null);
   const [error, setError] = useState<string | null>(null);
@@ -39,9 +43,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token || token === 'null') {
-      router.push('/login');
+    if(!ISSERVER){
+      const token = localStorage.getItem('token');
+      if (!token || token === 'null') {
+        router.push('/login');
+      }
     }
   }, []);
 
@@ -56,7 +62,7 @@ export default function Home() {
     });
   };
   const handleDeleteClick = async () => {
-    if (pdfFile && token) {
+    if (pdfFile && token != null && token !== undefined) {
       const formData = new FormData();
       formData.append('pdfFile', pdfFile);
       formData.append('newOrder', JSON.stringify(checkedPages));
@@ -81,7 +87,9 @@ export default function Home() {
 
   const handleLogout = () => {
     router.push('/');
-    localStorage.removeItem('token');
+    if(!ISSERVER){
+      localStorage.removeItem('token');
+    }
   } 
 
   if (showPDF) {
