@@ -11,7 +11,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.vers
 export default function Home() {
   const token = localStorage.getItem('token');
   const router = useRouter();
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [pdfFile, setPdfFile] = useState<File | null | undefined>(null);
   const [error, setError] = useState<string | null>(null);
   const [showPDF, setShowPDF] = useState(false);
   const [numPages, setNumPages] = useState<number>();
@@ -93,7 +93,7 @@ export default function Home() {
         </div>
         <div className="flex items-center md:justify-center">
           <Document file={pdfFile} onLoadError={(error) => console.log(error)} onLoadSuccess={onDocumentLoadSuccess}>
-            {Array.from({ length: numPages }, (_, index) => (
+            {numPages && Array.from({ length: numPages }, (_, index) => (
               <div className='md:flex' >
                 <div className='bg-gray-800'>
                   <p>Page Number: {index + 1}</p>
