@@ -30,7 +30,7 @@ export default function Login() {
   useEffect(() => {
     if (!ISSERVER) {
       const token = localStorage.getItem('token');
-      if (token || token !== 'null') {
+      if (token && token !== 'null') {
         router.push('/');
       }
     }
